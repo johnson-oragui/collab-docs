@@ -1,5 +1,6 @@
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
+import FAQ from '@/components/landing/FAQ';
 import Features from '@/components/landing/Features';
 import Hero from '@/components/landing/Hero';
 import Roadmap from '@/components/landing/Roadmap';
@@ -13,6 +14,7 @@ export default function Home() {
 			<Features />
 			<Security />
 			<Roadmap />
+			<FAQ />
 			<Footer />
 		</main>
 	);
