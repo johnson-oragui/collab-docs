@@ -22,6 +22,7 @@
     "migration:up": "ts-node ./node_modules/migrate-mongo/bin/migrate-mongo up",
     "migration:down": "ts-node ./node_modules/migrate-mongo/bin/migrate-mongo down",
     "migration:status": "ts-node ./node_modules/migrate-mongo/bin/migrate-mongo status",
+    "precompute": "ts-node -e \"console.log('Checking DB connection...')\"",
     "migration:db": "ts-node ./node_modules/migrate-mongo/bin/migrate-mongo db"
   },
   "dependencies": {
