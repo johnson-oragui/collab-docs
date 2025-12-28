@@ -1,12 +1,8 @@
 name: Backend CI
 
 on:
-  push:
-    branches: [main, dev]
-    paths:
-      - 'backend/**'
   pull_request:
-    branches: [main, dev]
+    branches: ['main', 'dev']
     paths:
       - 'backend/**'
 
@@ -24,6 +20,12 @@ jobs:
           --health-interval=5s
           --health-timeout=5s
           --health-retries=5
+      redis:
+        image: redis:latest
+        env:
+          REDIS_URL: redis://localhost:6379
+        ports:
+          - 6379:6379
 
     defaults:
       run:
@@ -41,9 +43,9 @@ jobs:
       - name: Install backend dependencies
         run: npm ci
 
-      - name: Reset test database
-        run: |
-          mongosh mongodb://localhost:27017/test_db --eval "db.dropDatabase()"
+      # - name: Reset test database
+      #   run: |
+      #     mongosh mongodb://localhost:27017/test_db --eval "db.dropDatabase()"
 
       - name: Run migrations
         run: npm run migration:up
