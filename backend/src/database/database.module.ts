@@ -1,7 +1,8 @@
-import { Global, Module } from '@nestjs/common';
+import { Global, Logger, Module } from '@nestjs/common';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import { ConfigService } from '@nestjs/config';
 
+const logger = new Logger('Database Module');
 @Global()
 @Module({
   providers: [
@@ -19,9 +20,7 @@ import { ConfigService } from '@nestjs/config';
         });
         await client.connect();
         await client.db(dbName).command({ ping: 1 });
-        console.log(
-          'Pinged your deployment. You successfully connected to MongoDB!',
-        );
+        logger.log('Deployment ping!. successful connection to MongoDB!');
         return client;
       },
       inject: [ConfigService],
