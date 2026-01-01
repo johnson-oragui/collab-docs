@@ -21,7 +21,14 @@ export class CreateUserRequestDto {
     example: 'johnson@email.com',
     required: true,
   })
-  @IsEmail()
+  @IsEmail(
+    {
+      allow_ip_domain: false,
+      domain_specific_validation: true,
+      host_blacklist: ['test.com'],
+    },
+    { message: 'email must be a valid email' },
+  )
   @Validate(IsEMailUniqueConstraint) // for database email unique check
   email: string;
 
