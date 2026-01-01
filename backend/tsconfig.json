@@ -23,5 +23,5 @@
     "noFallthroughCasesInSwitch": false
     
   },
-  "include": ["src/**/*", "env.d.ts"]
+  "include": ["src/**/*", "env.d.ts", "test/**/*"]
 }
