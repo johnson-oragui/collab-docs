@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { logger } from '../logger/logger.wiston';
+import { asyncStore } from '../storage/async-storage';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -22,22 +23,31 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const resMessage =
+    const res =
       exception instanceof HttpException
-        ? exception.message
-        : 'Internal server error';
+        ? (exception.getResponse() as object)
+        : {
+            message: (exception as Error).message,
+            error: 'Internal Server Error',
+            success: false,
+            statusCode: status,
+          };
+
+    const store = asyncStore.getStore();
 
     logger.error('Unhandled exception', {
       path: req.originalUrl,
       method: req.method,
       status,
       error: exception instanceof Error ? exception.message : String(exception),
+      requestId: store?.requestId,
     });
 
-    response.status(status).json({
-      statusCode: status,
-      message: resMessage,
-      sucess: false,
-    });
+    // console.log('res: ', res);
+    if (store?.requestId) {
+      response.setHeader('x-request-id', store.requestId);
+    }
+
+    response.status(status).json(res);
   }
 }

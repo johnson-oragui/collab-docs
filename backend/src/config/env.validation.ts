@@ -19,6 +19,18 @@ class EnvironmentVariables {
 
   @IsString()
   DB_NAME: string;
+
+  @IsString()
+  JWT_SECRET: string;
+
+  @IsString()
+  JWT_ISSUER: string;
+
+  @IsString()
+  JWT_AUDIENCE: string;
+
+  @IsString()
+  JWT_EXPIRY: string;
 }
 
 export function validateEnvConfig(

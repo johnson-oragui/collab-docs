@@ -9,6 +9,7 @@ import express from 'express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './commons/middlewares/http-exception.filter';
 import { ExpressAdapter } from '@nestjs/platform-express';
+import { useContainer } from 'class-validator';
 
 async function bootstrap() {
   try {
@@ -28,9 +29,13 @@ async function bootstrap() {
       methods: 'GET,POST,PATCH,PUT,DELETE',
       credentials: true,
       allowedHeaders: 'Content-Type, Accept, Authorization',
+      exposedHeaders: ['x-request-id'],
     });
     app.setGlobalPrefix('');
     app.enableVersioning();
+
+    // Enable DI for class-validator
+    useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
     app.useGlobalPipes(
       new ValidationPipe({
@@ -55,14 +60,14 @@ async function bootstrap() {
           scheme: 'bearer',
           bearerFormat: 'JWT',
         },
-        'access-token',
+        'bearer',
       )
-      .addGlobalParameters({
-        name: 'x-request-id',
-        in: 'header',
-        required: false,
-        description: 'Unique ID for tracing requests',
-      })
+      // .addGlobalParameters({
+      //   name: 'x-request-id',
+      //   in: 'header',
+      //   required: false,
+      //   description: 'Unique ID for tracing requests',
+      // })
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, document, {

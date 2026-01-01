@@ -43,9 +43,8 @@ jobs:
       - name: Install backend dependencies
         run: npm ci
 
-      # - name: Reset test database
-      #   run: |
-      #     mongosh mongodb://localhost:27017/test_db --eval "db.dropDatabase()"
+      - name: Copy env file
+        run: cp .env.sample .env
 
       - name: Run migrations
         run: npm run migration:up

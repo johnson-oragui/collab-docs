@@ -9,11 +9,18 @@ import { validateEnvConfig } from './config/env.validation';
 import { LoggerMiddleware } from './commons/middlewares/logging.middleware';
 import { CatchAllMiddleware } from './commons/middlewares/catchall.middleware';
 import { UserAgentGuard } from './commons/guards/userAgent.guards';
+import UserModule from './user/user.module';
+import { CustomJwtService } from './jwt-service/jwt.service';
+import { CustomJwtModule } from './jwt-service/jwt.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvConfig }),
     MongoDbModule,
+    UserModule,
+    CustomJwtModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
@@ -22,6 +29,7 @@ import { UserAgentGuard } from './commons/guards/userAgent.guards';
       provide: APP_GUARD,
       useClass: UserAgentGuard,
     },
+    CustomJwtService,
   ],
 })
 export class AppModule {

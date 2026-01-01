@@ -1,8 +1,9 @@
 import { Global, Logger, Module } from '@nestjs/common';
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { Db, MongoClient, ServerApiVersion } from 'mongodb';
 import { ConfigService } from '@nestjs/config';
 
 const logger = new Logger('Database Module');
+
 @Global()
 @Module({
   providers: [
@@ -10,7 +11,6 @@ const logger = new Logger('Database Module');
       provide: 'MONGO_CLIENT',
       useFactory: async (configService: ConfigService) => {
         const uri = configService.get<string>('MONGODB_URI') as string;
-        const dbName = configService.get<string>('DB_NAME') as string;
         const client = new MongoClient(uri, {
           serverApi: {
             version: ServerApiVersion.v1,
@@ -19,13 +19,26 @@ const logger = new Logger('Database Module');
           },
         });
         await client.connect();
-        await client.db(dbName).command({ ping: 1 });
-        logger.log('Deployment ping!. successful connection to MongoDB!');
+
         return client;
       },
       inject: [ConfigService],
     },
+    {
+      provide: 'DB',
+      useFactory: async (
+        client: MongoClient,
+        configService: ConfigService,
+      ): Promise<Db> => {
+        const dbName = configService.get<string>('DB_NAME') as string;
+        const db = client.db(dbName);
+        await db.command({ ping: 1 });
+        logger.log('Deployment ping!. successful connection to MongoDB!');
+        return db;
+      },
+      inject: ['MONGO_CLIENT', ConfigService],
+    },
   ],
-  exports: ['MONGO_CLIENT'],
+  exports: ['MONGO_CLIENT', 'DB'],
 })
 export class MongoDbModule {}
