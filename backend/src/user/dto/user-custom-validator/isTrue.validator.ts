@@ -9,7 +9,8 @@ import {
 export class IsTrueConstraint implements ValidatorConstraintInterface {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   validate(value: boolean, _?: ValidationArguments): boolean {
-    return value;
+    if (!value) return false;
+    return true;
   }
 
   defaultMessage() {
