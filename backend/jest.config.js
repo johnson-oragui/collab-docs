@@ -11,4 +11,10 @@ module.exports = {
   testTimeout: 30000,
   moduleFileExtensions: ['ts', 'js', 'json'],
   setupFiles: ['<rootDir>/test/jest.setup.ts'],
+
+  transformIgnorePatterns: [
+    'node_modules/(?!(uuid)/)',
+  ],
+  forceExit: true,
+  detectOpenHandles: true,
 };
