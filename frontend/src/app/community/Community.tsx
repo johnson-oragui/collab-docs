@@ -82,9 +82,12 @@ export default function CommunityContent() {
 					>
 						<div>
 							<div className="mb-6 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 w-fit group-hover:bg-indigo-500/10 transition-colors">
-								{React.cloneElement(channel.icon as React.ReactElement, {
-									size: 32,
-								})}
+								{React.cloneElement(
+									channel.icon as React.ReactElement<{ size?: number }>,
+									{
+										size: 32,
+									},
+								)}
 							</div>
 							<h3 className="text-xl font-bold mb-3 dark:text-white">
 								{channel.title}
