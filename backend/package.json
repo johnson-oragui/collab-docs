@@ -25,6 +25,12 @@
     "precompute": "ts-node -e \"console.log('Checking DB connection...')\"",
     "migration:db": "ts-node ./node_modules/migrate-mongo/bin/migrate-mongo db"
   },
+  "allowScripts": [
+    "@nestjs/core",
+    "@scarf/scarf",
+    "argon2",
+    "unrs-resolver"
+  ],
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
@@ -91,5 +97,11 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "allowScripts": {
+    "@nestjs/core@11.1.10": true,
+    "@scarf/scarf@1.4.0": true,
+    "argon2@0.44.0": true,
+    "unrs-resolver@1.11.1": true
   }
 }
