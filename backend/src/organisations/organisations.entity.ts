@@ -3,6 +3,7 @@ import { CustomBaseEntity } from '../database/base.entity';
 import { OrganisationMembershipEntity } from '../organisation-memberships/organisation-memberships.entity';
 import { UserEntity } from '@/user/user.entity';
 import { OrganisationOwnershipHistoryEntity } from '@/organisation-ownership-history/organisation-ownership-history.entity';
+import { OrganisationApiKeyEntity } from '@/organisation-api-key/organisation-api-key.entity';
 
 @Entity('collabdocs_organisations')
 export class OrganisationEntity extends CustomBaseEntity {
@@ -36,4 +37,11 @@ export class OrganisationEntity extends CustomBaseEntity {
     { cascade: true },
   )
   declare ownershipHistories: OrganisationOwnershipHistoryEntity[];
+
+  @OneToMany(
+    () => OrganisationApiKeyEntity,
+    (organisationApiKey) => organisationApiKey.organisation,
+    { cascade: true },
+  )
+  declare organisationApiKeys: OrganisationApiKeyEntity[];
 }
