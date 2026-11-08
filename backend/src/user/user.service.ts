@@ -1,44 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import UserRepository from './user.repository';
 import { PasswordService } from '../password/password.service';
 import {
   CreateUserRequestDto,
   CreateUserResponseDto,
   UserResponseEntity,
 } from './dto/user.create.dto';
-import { ObjectId } from 'mongodb';
 import { plainToInstance } from 'class-transformer';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from './user.entity';
+import { Repository } from 'typeorm';
+import { asyncStore } from '@/commons/storage/async-storage';
 
 @Injectable()
-export default class UserService {
+export class UserService {
   constructor(
-    private readonly userRepository: UserRepository,
     private readonly passwordService: PasswordService,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
+
 
   async signup(
     createDto: CreateUserRequestDto,
   ): Promise<CreateUserResponseDto> {
     const hashPass = await this.passwordService.hash(createDto.password);
-    const name =
-      createDto.firstname && createDto.lastname
-        ? `${createDto.firstname} ${createDto.lastname}`
-        : createDto.firstname
-          ? `${createDto.firstname}`
-          : createDto.lastname
-            ? `${createDto.lastname}`
-            : '';
 
-    const newUser = await this.userRepository.create({
+    const user = this.userRepository.create({
       password: hashPass,
-      name,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      firstName: createDto.firstname,
+      lastName: createDto.lastname,
       email: createDto.email.toLowerCase(),
-      _id: new ObjectId(),
-      role: 'user',
       acceptTerms: createDto.acceptTerms,
+      requestId: asyncStore.getStore()?.requestId,
     });
+    const newUser = await this.userRepository.save(user);
 
     const sanitizedData = plainToInstance(UserResponseEntity, newUser, {
       excludeExtraneousValues: true,

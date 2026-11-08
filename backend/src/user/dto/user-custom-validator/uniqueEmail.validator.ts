@@ -1,9 +1,9 @@
+import { UserRepository } from '@/user/user.repository';
 import { Injectable } from '@nestjs/common';
 import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import UserRepository from '../../user.repository';
 
 @ValidatorConstraint({ async: true })
 @Injectable()
@@ -12,7 +12,6 @@ export class IsEMailUniqueConstraint implements ValidatorConstraintInterface {
 
   async validate(email: string): Promise<boolean> {
     const emailExists = await this.userRepo.findByEmail(email.toLowerCase());
-    // console.log('emailExists: ', emailExists);
     return !emailExists;
   }
 

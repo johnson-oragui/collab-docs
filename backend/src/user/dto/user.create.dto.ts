@@ -11,7 +11,6 @@ import {
 } from 'class-validator';
 import { IsPasswordMatch } from './user-custom-validator/isPasswordMatch.validator';
 import { IsEMailUniqueConstraint } from './user-custom-validator/uniqueEmail.validator';
-import { ObjectId } from 'mongodb';
 import { IsTrue } from './user-custom-validator/isTrue.validator';
 import { Exclude, Expose } from 'class-transformer';
 
@@ -30,7 +29,7 @@ export class CreateUserRequestDto {
     { message: 'email must be a valid email' },
   )
   @Validate(IsEMailUniqueConstraint) // for database email unique check
-  email: string;
+  declare email: string;
 
   @ApiProperty({
     description: 'User password',
@@ -39,8 +38,8 @@ export class CreateUserRequestDto {
   })
   @IsStrongPassword()
   @MinLength(8)
-  @MaxLength(30)
-  password: string;
+  @MaxLength(40)
+  declare password: string;
 
   @ApiProperty({
     description: 'User email',
@@ -49,7 +48,7 @@ export class CreateUserRequestDto {
   })
   @IsString()
   @IsPasswordMatch('password')
-  confirmPassword: string;
+  declare confirmPassword: string;
 
   @ApiProperty({
     description: 'Accept terms and conditions',
@@ -58,7 +57,7 @@ export class CreateUserRequestDto {
   })
   @IsBoolean()
   @IsTrue()
-  acceptTerms: boolean;
+  declare acceptTerms: boolean;
 
   @ApiPropertyOptional({
     description: "User's firstname",
@@ -81,19 +80,19 @@ export class CreateUserRequestDto {
 
 export class UserResponseEntity {
   @Expose()
-  id: ObjectId;
+  declare id: string;
 
   @Expose()
-  email: string;
+  declare email: string;
 
   @Expose()
   name?: string | null;
 
   @Expose()
-  acceptTerms: boolean;
+  declare acceptTerms: boolean;
 
   @Expose()
-  createdAt: Date;
+  declare createdAt: Date;
 
   @Exclude()
   password?: string;
@@ -102,10 +101,7 @@ export class UserResponseEntity {
   role?: string;
 
   @Exclude()
-  updatedAt: Date;
-
-  @Exclude()
-  _id: ObjectId;
+  declare updatedAt: Date;
 
   constructor(partial: Partial<UserResponseEntity>) {
     Object.assign(this, partial);
@@ -130,12 +126,13 @@ export class CreateUserResponseDto {
 
   @ApiProperty({
     example: {
-      id: new ObjectId(),
+      id: "",
       email: 'email@email.com',
-      name: 'Johnson Dennis',
+      firstName: 'Johnson',
+      lastName: "Dennis",
       createdAt: new Date(),
     },
     required: true,
   })
-  data: UserResponseEntity;
+  declare data: UserResponseEntity;
 }

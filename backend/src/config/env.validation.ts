@@ -9,28 +9,49 @@ enum Environment {
 
 class EnvironmentVariables {
   @IsEnum(Environment)
-  NODE_ENV: Environment;
+  declare NODE_ENV: Environment;
 
   @IsPositive()
-  PORT: number;
+  declare PORT: number;
 
   @IsString()
-  MONGODB_URI: string;
+  declare TEST: string;
 
   @IsString()
-  DB_NAME: string;
+  declare DB_HOST: string;
 
   @IsString()
-  JWT_SECRET: string;
+  declare DB_PORT: string;
 
   @IsString()
-  JWT_ISSUER: string;
+  declare DB_USER: string;
 
   @IsString()
-  JWT_AUDIENCE: string;
+  declare DB_PASSWORD: string;
 
   @IsString()
-  JWT_EXPIRY: string;
+  declare DB_NAME: string;
+
+  @IsString()
+  declare TEST_DB_NAME: string;
+
+  @IsString()
+  declare JWT_SECRET: string;
+
+  @IsString()
+  declare JWT_ISSUER: string;
+
+  @IsString()
+  declare JWT_AUDIENCE: string;
+
+  @IsString()
+  declare JWT_EXPIRY: string;
+
+  @IsString()
+  declare AUTH_COOKIE_NAME: string;
+
+  @IsString()
+  declare AUTH_REFRESH_COOKIE_NAME: string;
 }
 
 export function validateEnvConfig(

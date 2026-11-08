@@ -25,12 +25,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const res =
       exception instanceof HttpException
-        ? (exception.getResponse() as object)
-        : {
-            message: (exception as Error).message,
-            error: 'Internal Server Error',
+        ? {
+            ...(exception.getResponse() as Record<string, any>),
             success: false,
-            statusCode: status,
+            message:
+              (exception.getResponse() as Record<string, any>)?.message ??
+              'Error',
+          }
+        : {
+            message: 'Internal Server Error',
+            success: false,
           };
 
     const store = asyncStore.getStore();

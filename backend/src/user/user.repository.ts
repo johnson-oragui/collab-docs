@@ -1,16 +1,34 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Db, WithId } from 'mongodb';
-import { BaseRepository } from '../database/collections/base.repository';
-import { UserDocument } from '../database/schemas/user.schema';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from './user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export default class UserRepository extends BaseRepository<UserDocument> {
-  constructor(@Inject('DB') protected readonly db: Db) {
-    super(db, 'cd_users');
+export class UserRepository {
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ) {}
+
+  findAll(): Promise<UserEntity[]> {
+    return this.userRepository.find();
   }
 
-  async findByEmail(email: string): Promise<WithId<UserDocument> | null> {
-    // console.log('running find by email...');
-    return this.collection.findOne({ email });
+  async findByEmail(email: string) {
+    try {
+      return (await this.userRepository.findBy({ email }))?.[0];
+    } catch (error) {
+      console.error('Error finding user by email: ', error);
+      throw error;
+    }
+  }
+
+  async findById(userId: string) {
+    try {
+      return (await this.userRepository.find({ where: { id: userId } }))?.[0];
+    } catch (error) {
+      console.error('Error finding user by ID: ', error);
+      throw error;
+    }
   }
 }
