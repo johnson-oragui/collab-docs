@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CustomJwtService } from './jwt.service';
 import { AuthenticatedRequest } from '../commons/http/request.interface';
-import UserRepository from '../user/user.repository';
+import { UserRepository } from '../user/user.repository';
 import { Request } from 'express';
 import { UserSchema } from '../user/schema/user.schema';
 
@@ -34,7 +34,7 @@ export class CustomJwtAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    req['user'] = user as UserSchema;
+    req['user'] = user;
     return true;
   }
 }

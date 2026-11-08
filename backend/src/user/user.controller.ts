@@ -8,10 +8,10 @@ import {
 import { CurrentUser } from '../jwt-service/current-user-decorator';
 import { CustomJwtAuthGuard } from '../jwt-service/jwt.auth.guard';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import type { UserSchema } from './schema/user.schema';
 import { UserDataResponseDto } from './dto/user.data.dto';
 import { plainToInstance } from 'class-transformer';
 import { UserResponseEntity } from './dto/user.create.dto';
+import { type UserSchema } from './schema/user.schema';
 
 @ApiTags('USERS')
 @Controller('api/v1/users')
