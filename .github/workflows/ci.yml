@@ -74,7 +74,7 @@ jobs:
 
             try {
               const sql = fs.readFileSync(
-                'test/fixture/setup/create-databases.sql',
+                'test/fixtures/setup/create-databases.sql',
                 'utf8',
               );
 
