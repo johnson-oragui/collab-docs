@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ObjectId } from 'mongodb';
 import { UserResponseEntity } from './user.create.dto';
 
 export class UserDataResponseDto {
@@ -20,12 +19,12 @@ export class UserDataResponseDto {
 
   @ApiProperty({
     example: {
-      id: new ObjectId(),
+      id: "",
       email: 'email@email.com',
       name: 'Johnson Dennis',
       createdAt: new Date(),
     },
     required: true,
   })
-  data: UserResponseEntity;
+  declare data: UserResponseEntity;
 }
